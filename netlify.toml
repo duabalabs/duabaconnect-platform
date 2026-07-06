@@ -1,0 +1,15 @@
+# Netlify — deploys ONLY the frontend (apps/frontend) from this pnpm monorepo.
+# Netlify auto-installs at the workspace root (pnpm-lock.yaml), whose `postinstall`
+# runs prisma-generate; the build command then builds just the frontend package.
+# The Next.js runtime plugin serves SSR (the app is force-dynamic).
+
+[build]
+  command = "pnpm --filter ./apps/frontend run build"
+  publish = "apps/frontend/.next"
+
+[build.environment]
+  NODE_VERSION = "22.20.0"
+  NODE_OPTIONS = "--max-old-space-size=4096"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
