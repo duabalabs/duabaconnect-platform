@@ -23,7 +23,8 @@ export function setCookie(cname: string, cvalue: string, exdays: number) {
 }
 function LayoutContextInner(params: { children: ReactNode }) {
   const returnUrl = useReturnUrl();
-  const { backendUrl, isGeneral, isSecured } = useVariables();
+  const { backendUrl, isGeneral, isSecured, externalBillingPortalUrl } =
+    useVariables();
   const afterRequest = useCallback(
     async (url: string, options: RequestInit, response: Response) => {
       if (
@@ -113,7 +114,7 @@ function LayoutContextInner(params: { children: ReactNode }) {
             'Payment Required'
           )
         ) {
-          window.open('/billing', '_blank');
+          window.open(externalBillingPortalUrl || '/billing', '_blank');
           return false;
         }
         return true;

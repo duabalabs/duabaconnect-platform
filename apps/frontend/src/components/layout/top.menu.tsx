@@ -314,7 +314,14 @@ export const useMenuItem = () => {
 export const TopMenu: FC = () => {
   const user = useUser();
   const { firstMenu, secondMenu } = useMenuItem();
-  const { isGeneral, billingEnabled } = useVariables();
+  const { isGeneral, billingEnabled, externalBillingPortalUrl } =
+    useVariables();
+  // With external billing (Sellub/Paystack) the Billing item links out to the
+  // provider's portal instead of the internal Stripe billing page.
+  const resolvePath = (item: { name: string; path: string }) =>
+    item.name === 'Billing' && externalBillingPortalUrl
+      ? externalBillingPortalUrl
+      : item.path;
   return (
     <>
       <div className="flex flex-1 flex-col minCustom:gap-[16px] blurMe">
@@ -341,7 +348,7 @@ export const TopMenu: FC = () => {
               })
               .map((item, index) => (
                 <MenuItem
-                  path={item.path}
+                  path={resolvePath(item)}
                   label={item.name}
                   icon={item.icon}
                   key={item.name}
