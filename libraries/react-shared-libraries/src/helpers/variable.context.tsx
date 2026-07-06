@@ -4,6 +4,9 @@ import { createContext, FC, ReactNode, useContext, useEffect } from 'react';
 interface VariableContextInterface {
   stripeClient: string;
   billingEnabled: boolean;
+  // When set, billing is handled by an external portal (e.g. Sellub/Paystack)
+  // instead of Stripe checkout: upgrade prompts / the billing menu link here.
+  externalBillingPortalUrl?: string;
   isChatBase: boolean;
   isGeneral: boolean;
   genericOauth: boolean;
