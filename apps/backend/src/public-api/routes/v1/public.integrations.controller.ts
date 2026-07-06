@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -297,6 +298,22 @@ export class PublicIntegrationsController {
         name: customer.name,
       })
     );
+  }
+
+  @Post('/customers')
+  async createCustomer(
+    @GetOrgFromRequest() org: Organization,
+    @Body('name') name: string
+  ) {
+    Sentry.metrics.count('public_api-request', 1);
+    if (!name) {
+      throw new HttpException('name is required', HttpStatus.BAD_REQUEST);
+    }
+    const customer = await this._integrationService.findOrCreateCustomer(
+      org.id,
+      name
+    );
+    return { id: customer.id, name: customer.name };
   }
 
   @Get('/integrations')

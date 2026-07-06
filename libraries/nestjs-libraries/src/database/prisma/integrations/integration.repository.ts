@@ -452,6 +452,24 @@ export class IntegrationRepository {
     });
   }
 
+  async findOrCreateCustomer(org: string, name: string) {
+    return (
+      (await this._customers.model.customer.findFirst({
+        where: {
+          orgId: org,
+          name,
+          deletedAt: null,
+        },
+      })) ||
+      (await this._customers.model.customer.create({
+        data: {
+          name,
+          orgId: org,
+        },
+      }))
+    );
+  }
+
   updateIntegrationGroup(org: string, id: string, group: string) {
     return this._integration.model.integration.update({
       where: {
