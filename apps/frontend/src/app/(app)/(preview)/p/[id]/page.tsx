@@ -3,6 +3,7 @@ import { sanitizePostContent } from '@gitroom/helpers/utils/sanitize.post.conten
 export const dynamic = 'force-dynamic';
 import { Metadata } from 'next';
 import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
+import { BRAND_NAME } from '@gitroom/helpers/utils/brand';
 import SafeImage from '@gitroom/react/helpers/safe.image';
 import Link from 'next/link';
 import { CommentsComponents } from '@gitroom/frontend/components/preview/comments.components';
@@ -16,7 +17,7 @@ import { CreationMethodBadge } from '@gitroom/frontend/components/launches/creat
 
 dayjs.extend(utc);
 export const metadata: Metadata = {
-  title: `${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Preview`,
+  title: `${BRAND_NAME} Preview`,
   description: '',
 };
 export default async function Auth(

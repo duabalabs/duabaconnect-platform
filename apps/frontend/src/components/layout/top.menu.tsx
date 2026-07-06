@@ -247,6 +247,7 @@ export const useMenuItem = () => {
         </svg>
       ),
       path: 'https://affiliate.postiz.com',
+      hide: true, // DuabaConnect: no affiliate program (Postiz upstream item)
       role: ['ADMIN', 'SUPERADMIN', 'USER'],
       requireBilling: true,
     },
