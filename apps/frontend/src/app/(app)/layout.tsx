@@ -68,6 +68,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           externalBillingPortalUrl={
             process.env.EXTERNAL_BILLING_PORTAL_URL || ''
           }
+          connectUrl={process.env.NEXT_PUBLIC_CONNECT_URL || ''}
           discordUrl={process.env.NEXT_PUBLIC_DISCORD_SUPPORT!}
           frontEndUrl={process.env.FRONTEND_URL!}
           isGeneral={!!process.env.IS_GENERAL}

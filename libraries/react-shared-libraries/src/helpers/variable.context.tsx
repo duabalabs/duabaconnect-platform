@@ -7,6 +7,9 @@ interface VariableContextInterface {
   // When set, billing is handled by an external portal (e.g. Sellub/Paystack)
   // instead of Stripe checkout: upgrade prompts / the billing menu link here.
   externalBillingPortalUrl?: string;
+  // Base URL of the DuabaConnect automation backend (api.automate.duabaconnect.com);
+  // the automation pages (marketplace/developers/plans) call it with the session cookie.
+  connectUrl?: string;
   isChatBase: boolean;
   isGeneral: boolean;
   genericOauth: boolean;

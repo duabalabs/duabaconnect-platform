@@ -156,6 +156,24 @@ export const useMenuItem = () => {
       ),
       path: '/third-party',
     },
+    {
+      name: t('automations', 'Automations'),
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M11 1 3 11h6l-1 8 8-10h-6l1-8Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ),
+      path: '/automations',
+    },
+    {
+      name: t('developers', 'Developers'),
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="m7 6-5 4 5 4M13 6l5 4-5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ),
+      path: '/developers',
+    },
   ] satisfies MenuItemInterface[] as MenuItemInterface[];
 
   const secondMenu = [
