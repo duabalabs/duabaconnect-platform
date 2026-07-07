@@ -41,6 +41,7 @@ import { StreakComponent } from '@gitroom/frontend/components/layout/streak.comp
 import { PreConditionComponent } from '@gitroom/frontend/components/layout/pre-condition.component';
 import { AttachToFeedbackIcon } from '@gitroom/frontend/components/new-layout/sentry.feedback.component';
 import { FirstBillingComponent } from '@gitroom/frontend/components/billing/first.billing.component';
+import { PlansComponent } from '@gitroom/frontend/components/connect/plans.component';
 import { TrialTracker } from '@gitroom/frontend/components/layout/gtm.component';
 
 const jakartaSans = Plus_Jakarta_Sans({
@@ -52,7 +53,8 @@ const jakartaSans = Plus_Jakarta_Sans({
 export const LayoutComponent = ({ children }: { children: ReactNode }) => {
   const fetch = useFetch();
 
-  const { backendUrl, billingEnabled, isGeneral } = useVariables();
+  const { backendUrl, billingEnabled, isGeneral, externalBillingPortalUrl } =
+    useVariables();
 
   // Feedback icon component attaches Sentry feedback to a top-bar icon when DSN is present
   const searchParams = useSearchParams();
@@ -96,7 +98,17 @@ export const LayoutComponent = ({ children }: { children: ReactNode }) => {
             >
               <div>{user?.admin ? <Impersonate /> : <div />}</div>
               {user.tier === 'FREE' && isGeneral && billingEnabled ? (
-                <FirstBillingComponent />
+                // DuabaConnect bills via the external Sellub portal, not Stripe.
+                // When it's configured, gate with the Sellub PlansComponent —
+                // NOT Stripe's FirstBillingComponent, whose /billing/embedded
+                // call 401s and triggers the global logout-redirect loop.
+                externalBillingPortalUrl ? (
+                  <div className="p-[24px]">
+                    <PlansComponent />
+                  </div>
+                ) : (
+                  <FirstBillingComponent />
+                )
               ) : (
                 <>
                   <AnnouncementBanner />
