@@ -38,4 +38,7 @@ RUN find /app/node_modules -type d \( -name 'prisma' -o -name '@prisma' -o -name
 # would re-download prisma on every boot. `--skip-generate`: the client is
 # already generated at build, so skip the boot-time regenerate (which would
 # copy the engine into a root-owned node_modules dir → EACCES).
-CMD ["sh", "-c", "pnpm exec prisma db push --skip-generate --accept-data-loss --schema ./libraries/nestjs-libraries/src/database/prisma/schema.prisma && pnpm --filter ./apps/backend --filter ./apps/orchestrator --parallel run pm2 && pm2 logs"]
+# Start the two apps SEQUENTIALLY (not --parallel): running both `pm2 start`
+# concurrently races to spawn the daemon at the same PM2_HOME, and one app's
+# registration is lost. The first call spawns the daemon; the second reuses it.
+CMD ["sh", "-c", "pnpm exec prisma db push --skip-generate --accept-data-loss --schema ./libraries/nestjs-libraries/src/database/prisma/schema.prisma && pnpm --filter ./apps/backend run pm2 && pnpm --filter ./apps/orchestrator run pm2 && pm2 logs"]
