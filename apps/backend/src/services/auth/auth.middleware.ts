@@ -7,7 +7,6 @@ import { UsersService } from '@gitroom/nestjs-libraries/database/prisma/users/us
 import { getCookieUrlFromDomain } from '@gitroom/helpers/subdomain/subdomain.management';
 import { HttpForbiddenException } from '@gitroom/nestjs-libraries/services/exception.filter';
 import { MastraService } from '@gitroom/nestjs-libraries/chat/mastra.service';
-import { isConfiguredSuperAdmin } from '@gitroom/helpers/utils/super.admin';
 
 export const removeAuth = (res: Response) => {
   res.cookie('auth', '', {
@@ -55,13 +54,6 @@ export class AuthMiddleware implements NestMiddleware {
 
       if (!user.activated) {
         throw new HttpForbiddenException();
-      }
-
-      // Env-designated super-admins (SUPER_ADMIN_EMAILS) get the flag without a
-      // DB edit — drives the paywall bypass + admin routes. Re-checked here every
-      // request, so toggling SUPER_ADMIN_ENABLED takes effect immediately.
-      if (isConfiguredSuperAdmin(user.email)) {
-        user.isSuperAdmin = true;
       }
 
       const impersonate = req.cookies.impersonate || req.headers.impersonate;
