@@ -23,6 +23,13 @@ RUN NODE_OPTIONS="--max-old-space-size=4096" pnpm run build:backend \
 # backend :3000, orchestrator health :3002
 EXPOSE 3000 3002
 
+# DPS/K8s runs the container under a non-root UID with no home dir, so HOME is
+# empty and pnpm/pm2 try to write caches to `/` (EACCES). Point HOME at a
+# writable path so pnpm's cache and pm2's `.pm2` land in /tmp.
+ENV HOME=/tmp
+
 # Sync the platform schema, then run backend + orchestrator under pm2 (pm2 logs
 # keeps the container in the foreground). The frontend pm2 process is not started.
-CMD ["sh", "-c", "pnpm run prisma-db-push && pnpm --filter ./apps/backend --filter ./apps/orchestrator --parallel run pm2 && pm2 logs"]
+# Use the prisma already installed at build (`pnpm exec`), NOT `pnpm dlx`, which
+# would re-download prisma from npm on every boot.
+CMD ["sh", "-c", "pnpm exec prisma db push --accept-data-loss --schema ./libraries/nestjs-libraries/src/database/prisma/schema.prisma && pnpm --filter ./apps/backend --filter ./apps/orchestrator --parallel run pm2 && pm2 logs"]
