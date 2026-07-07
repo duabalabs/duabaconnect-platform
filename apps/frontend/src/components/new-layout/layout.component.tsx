@@ -97,7 +97,11 @@ export const LayoutComponent = ({ children }: { children: ReactNode }) => {
               )}
             >
               <div>{user?.admin ? <Impersonate /> : <div />}</div>
-              {user.tier === 'FREE' && isGeneral && billingEnabled ? (
+              {user.tier === 'FREE' &&
+              isGeneral &&
+              billingEnabled &&
+              !user?.admin ? (
+                // Admins bypass the paywall entirely (for testing). Otherwise:
                 // DuabaConnect bills via the external Sellub portal, not Stripe.
                 // When it's configured, gate with the Sellub PlansComponent —
                 // NOT Stripe's FirstBillingComponent, whose /billing/embedded
