@@ -22,6 +22,7 @@ export const useMenuItem = () => {
   const { isGeneral } = useVariables();
   const t = useT();
   const { openModal } = useModals();
+  const user = useUser();
 
   const handleAgentMediaClick = useCallback(() => {
     openModal({
@@ -173,6 +174,19 @@ export const useMenuItem = () => {
         </svg>
       ),
       path: '/developers',
+    },
+    {
+      // Platform admins only — manage the automation catalog + pricing.
+      name: t('manage_automations', 'Manage automations'),
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 2.5 3 6v8l7 3.5L17 14V6l-7-3.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+          <path d="M10 8.5v3M8.5 10h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      ),
+      path: '/admin/automations',
+      // @ts-ignore — Postiz user carries admin (isSuperAdmin)
+      hide: !user?.admin,
     },
   ] satisfies MenuItemInterface[] as MenuItemInterface[];
 
