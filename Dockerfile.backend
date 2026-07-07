@@ -28,12 +28,14 @@ EXPOSE 3000 3002
 # writable path so pnpm's cache and pm2's `.pm2` land in /tmp.
 ENV HOME=/tmp
 # prisma places its engine under node_modules at first run; that tree is
-# root-owned from the build. Make every @prisma/.prisma dir writable by any UID
-# (pnpm nests them under .pnpm, so search the whole tree).
-RUN find /app/node_modules -type d \( -name '@prisma' -o -name '.prisma' \) -exec chmod -R a+rwX {} + 2>/dev/null || true
+# root-owned from the build. Make every prisma/@prisma/.prisma dir writable by
+# any UID (pnpm nests them under .pnpm, so search the whole tree).
+RUN find /app/node_modules -type d \( -name 'prisma' -o -name '@prisma' -o -name '.prisma' \) -exec chmod -R a+rwX {} + 2>/dev/null || true
 
 # Sync the platform schema, then run backend + orchestrator under pm2 (pm2 logs
 # keeps the container in the foreground). The frontend pm2 process is not started.
 # Use the prisma already installed at build (`pnpm exec`), NOT `pnpm dlx`, which
-# would re-download prisma from npm on every boot.
-CMD ["sh", "-c", "pnpm exec prisma db push --accept-data-loss --schema ./libraries/nestjs-libraries/src/database/prisma/schema.prisma && pnpm --filter ./apps/backend --filter ./apps/orchestrator --parallel run pm2 && pm2 logs"]
+# would re-download prisma on every boot. `--skip-generate`: the client is
+# already generated at build, so skip the boot-time regenerate (which would
+# copy the engine into a root-owned node_modules dir → EACCES).
+CMD ["sh", "-c", "pnpm exec prisma db push --skip-generate --accept-data-loss --schema ./libraries/nestjs-libraries/src/database/prisma/schema.prisma && pnpm --filter ./apps/backend --filter ./apps/orchestrator --parallel run pm2 && pm2 logs"]
