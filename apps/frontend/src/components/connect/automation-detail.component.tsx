@@ -92,7 +92,13 @@ const Blueprint: FC<{ text: string }> = ({ text }) => {
       const parse = (r: string) =>
         r.split('|').slice(1, -1).map((c) => c.trim());
       const header = parse(rows[0]);
-      const body = rows.slice(1).filter((r) => !/^\s*\|[-:\s|]+\|\s*$/.test(r));
+      // A markdown separator row's cells are all dashes (with optional colons).
+      // NOTE: do not use a bracketed regex char-class containing a colon here —
+      // Tailwind's content scanner mistakes it for an arbitrary-property class
+      // and emits invalid CSS that breaks the Turbopack build.
+      const isSeparator = (r: string) =>
+        parse(r).every((c) => /^:?-+:?$/.test(c));
+      const body = rows.slice(1).filter((r) => !isSeparator(r));
       out.push(
         <div key={i} className="overflow-x-auto">
           <table className="text-[12px] text-white/70 border-collapse">
