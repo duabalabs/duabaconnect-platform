@@ -55,10 +55,10 @@ export const DevelopersComponent: FC = () => {
   );
 
   return (
-    <div className="flex flex-col gap-[16px] text-white">
+    <div className="flex flex-col gap-[16px] text-textColor">
       <div>
         <h1 className="text-[24px] font-[600]">Developers</h1>
-        <p className="text-white/60 text-[14px]">
+        <p className="text-newTextColor/60 text-[14px]">
           API keys for the DuabaConnect integrator API
           (<span className="font-mono">automateapi.duabaconnect.com</span>).
         </p>
@@ -66,7 +66,7 @@ export const DevelopersComponent: FC = () => {
 
       {revealed && (
         <div className="rounded-[8px] border border-[#8b5cf6] bg-[#8b5cf6]/10 p-[16px]">
-          <div className="text-[13px] text-white/70 mb-[6px]">
+          <div className="text-[13px] text-newTextColor/70 mb-[6px]">
             Copy this key now — it won&apos;t be shown again.
           </div>
           <div className="font-mono text-[14px] break-all">{revealed}</div>
@@ -81,7 +81,7 @@ export const DevelopersComponent: FC = () => {
 
       <div className="flex gap-[10px] items-center">
         <input
-          className="flex-1 rounded-[8px] bg-[#1A1919] border border-white/10 px-[12px] py-[8px] text-[14px]"
+          className="flex-1 rounded-[8px] bg-newBgColorInner border border-newBgLineColor px-[12px] py-[8px] text-[14px]"
           placeholder="Key name (e.g. prod)"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -95,15 +95,15 @@ export const DevelopersComponent: FC = () => {
         </button>
       </div>
 
-      <div className="rounded-[8px] border border-white/10 divide-y divide-white/10">
+      <div className="rounded-[8px] border border-newBgLineColor divide-y divide-newBgLineColor">
         {(keys || []).length === 0 && (
-          <div className="p-[16px] text-white/50 text-[14px]">No keys yet.</div>
+          <div className="p-[16px] text-newTextColor/50 text-[14px]">No keys yet.</div>
         )}
         {(keys || []).map((k) => (
           <div key={k.id} className="flex items-center gap-[12px] p-[14px]">
             <div className="flex-1">
               <div className="text-[14px] font-[500]">{k.name}</div>
-              <div className="text-[12px] text-white/50 font-mono">
+              <div className="text-[12px] text-newTextColor/50 font-mono">
                 {k.prefix}…{k.lastFour}
                 {k.lastUsedAt
                   ? ` · last used ${new Date(k.lastUsedAt).toLocaleDateString()}`
@@ -111,7 +111,7 @@ export const DevelopersComponent: FC = () => {
               </div>
             </div>
             {k.revokedAt ? (
-              <span className="text-[12px] text-white/40">revoked</span>
+              <span className="text-[12px] text-newTextColor/40">revoked</span>
             ) : (
               <button
                 className="text-[13px] text-red-400 hover:underline"

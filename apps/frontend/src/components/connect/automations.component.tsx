@@ -44,10 +44,10 @@ export const AutomationsComponent: FC = () => {
   });
 
   return (
-    <div className="flex flex-col gap-[24px] text-white">
+    <div className="flex flex-col gap-[24px] text-textColor">
       <div>
         <h1 className="text-[24px] font-[600]">Automations</h1>
-        <p className="text-white/60 text-[14px]">
+        <p className="text-newTextColor/60 text-[14px]">
           Prebuilt, Ghana-ready workflows. Open one to see what it does, configure
           it, and deploy.
         </p>
@@ -56,16 +56,16 @@ export const AutomationsComponent: FC = () => {
       {!!instances?.length && (
         <div>
           <h2 className="text-[16px] font-[600] mb-[10px]">Your automations</h2>
-          <div className="rounded-[8px] border border-white/10 divide-y divide-white/10">
+          <div className="rounded-[8px] border border-newBgLineColor divide-y divide-newBgLineColor">
             {instances.map((i) => (
               <a
                 key={i.id}
                 href={`/automations/${i.workflowKey}`}
-                className="flex items-center gap-[12px] p-[14px] hover:bg-white/5"
+                className="flex items-center gap-[12px] p-[14px] hover:bg-newBgLineColor"
               >
                 <div className="flex-1">
                   <div className="text-[14px] font-[500]">{i.name}</div>
-                  <div className="text-[12px] text-white/50">{i.status}</div>
+                  <div className="text-[12px] text-newTextColor/50">{i.status}</div>
                 </div>
                 <span className="text-[13px] text-[#8b5cf6]">Open →</span>
               </a>
@@ -81,17 +81,17 @@ export const AutomationsComponent: FC = () => {
             <a
               key={c.id}
               href={`/automations/${c.workflowKey}`}
-              className="rounded-[8px] border border-white/10 bg-[#1A1919] p-[16px] flex flex-col gap-[8px] hover:border-[#8b5cf6]/60 transition-colors"
+              className="rounded-[8px] border border-newBgLineColor bg-newBgColorInner p-[16px] flex flex-col gap-[8px] hover:border-[#8b5cf6]/60 transition-colors"
             >
               <div className="text-[15px] font-[600]">{c.name}</div>
-              <div className="text-[13px] text-white/50">{priceLabel(c)}</div>
+              <div className="text-[13px] text-newTextColor/50">{priceLabel(c)}</div>
               <span className="mt-auto text-[13px] text-[#8b5cf6]">
                 View &amp; deploy →
               </span>
             </a>
           ))}
           {(catalog || []).length === 0 && (
-            <div className="text-white/50 text-[14px]">
+            <div className="text-newTextColor/50 text-[14px]">
               No automations in the catalog yet.
             </div>
           )}

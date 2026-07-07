@@ -63,7 +63,7 @@ const Section: FC<{ eyebrow: string; title: string; children: ReactNode }> = ({
 }) => (
   <section className="flex flex-col gap-[16px]">
     <div>
-      <div className="text-[11px] font-[700] tracking-[0.14em] uppercase text-[#a78bfa]">
+      <div className="text-[11px] font-[700] tracking-[0.14em] uppercase text-[#8b5cf6]">
         {eyebrow}
       </div>
       <h2 className="text-[19px] font-[650] mt-[4px]">{title}</h2>
@@ -73,7 +73,7 @@ const Section: FC<{ eyebrow: string; title: string; children: ReactNode }> = ({
 );
 
 const Chip: FC<{ children: ReactNode }> = ({ children }) => (
-  <span className="inline-flex items-center rounded-full border border-white/12 bg-white/[0.04] px-[12px] py-[6px] text-[13px] text-white/80">
+  <span className="inline-flex items-center rounded-full border border-newBgLineColor bg-newBgLineColor px-[12px] py-[6px] text-[13px] text-newTextColor/80">
     {children}
   </span>
 );
@@ -166,7 +166,7 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
 
   if (!detail) {
     return (
-      <div className="text-white/40 text-[14px] py-[40px] text-center">
+      <div className="text-newTextColor/40 text-[14px] py-[40px] text-center">
         Loading…
       </div>
     );
@@ -184,13 +184,13 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
       : 'Automated';
 
   const cta = (
-    <div className="rounded-[14px] border border-white/10 bg-gradient-to-b from-[#221f2b] to-[#1a1720] p-[20px] flex flex-col gap-[14px]">
+    <div className="rounded-[14px] border border-newBgLineColor bg-newBgColorInner p-[20px] flex flex-col gap-[14px]">
       <div className="flex items-baseline gap-[4px]">
         <span className="text-[28px] font-[700]">{priceText(detail)}</span>
-        <span className="text-[14px] text-white/50">{priceUnit(detail)}</span>
+        <span className="text-[14px] text-newTextColor/50">{priceUnit(detail)}</span>
       </div>
       {instance ? (
-        <div className="rounded-[8px] bg-[#8b5cf6]/15 text-[#c4b5fd] text-[13px] px-[12px] py-[10px] text-center font-[600]">
+        <div className="rounded-[8px] bg-[#8b5cf6]/15 text-[#8b5cf6] text-[13px] px-[12px] py-[10px] text-center font-[600]">
           Deployed · {instance.status}
         </div>
       ) : canDeploy ? (
@@ -219,7 +219,7 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
           Subscribe to deploy
         </button>
       )}
-      <div className="text-[12px] text-white/45 leading-[1.5]">
+      <div className="text-[12px] text-newTextColor/45 leading-[1.5]">
         {instance
           ? 'Manage runs and results below.'
           : isAdmin && paid
@@ -232,12 +232,12 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
   );
 
   return (
-    <div className="flex flex-col gap-[44px] text-white pb-[40px]">
+    <div className="flex flex-col gap-[44px] text-textColor pb-[40px]">
       {/* ── hero ── */}
       <div className="flex flex-col gap-[24px]">
         <a
           href="/automations"
-          className="text-[13px] text-white/40 hover:text-white/70 w-fit"
+          className="text-[13px] text-newTextColor/40 hover:text-newTextColor/70 w-fit"
         >
           ← All automations
         </a>
@@ -252,7 +252,7 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
               {detail.name.replace(/^[^—]+—\s*/, '')}
             </h1>
             {(ov?.tagline || detail.description) && (
-              <p className="text-[16px] text-white/65 leading-[1.55] max-w-[62ch]">
+              <p className="text-[16px] text-newTextColor/65 leading-[1.55] max-w-[62ch]">
                 {ov?.tagline || detail.description}
               </p>
             )}
@@ -275,12 +275,12 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
                 .map((x) => (
                   <div
                     key={x.k}
-                    className="rounded-[12px] border border-white/10 bg-[#1A1919] p-[18px] flex flex-col gap-[8px]"
+                    className="rounded-[12px] border border-newBgLineColor bg-newBgColorInner p-[18px] flex flex-col gap-[8px]"
                   >
-                    <div className="text-[12px] font-[700] uppercase tracking-[0.08em] text-[#a78bfa]">
+                    <div className="text-[12px] font-[700] uppercase tracking-[0.08em] text-[#8b5cf6]">
                       {x.k}
                     </div>
-                    <div className="text-[13.5px] text-white/75 leading-[1.55]">
+                    <div className="text-[13.5px] text-newTextColor/75 leading-[1.55]">
                       {x.v}
                     </div>
                   </div>
@@ -292,7 +292,7 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
       {/* ── the challenge ── */}
       {ov?.problem && (
         <Section eyebrow="The problem" title="Why this matters">
-          <p className="text-[15px] text-white/70 leading-[1.7] max-w-[74ch]">
+          <p className="text-[15px] text-newTextColor/70 leading-[1.7] max-w-[74ch]">
             {ov.problem}
           </p>
         </Section>
@@ -305,17 +305,17 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
             {ov.steps.map((s, i) => (
               <div key={i} className="flex gap-[16px]">
                 <div className="flex flex-col items-center">
-                  <div className="w-[28px] h-[28px] rounded-full bg-[#8b5cf6]/15 text-[#c4b5fd] text-[12px] font-[700] flex items-center justify-center shrink-0">
+                  <div className="w-[28px] h-[28px] rounded-full bg-[#8b5cf6]/15 text-[#8b5cf6] text-[12px] font-[700] flex items-center justify-center shrink-0">
                     {i + 1}
                   </div>
                   {i < ov.steps.length - 1 && (
-                    <div className="w-[2px] flex-1 bg-white/10 my-[4px]" />
+                    <div className="w-[2px] flex-1 bg-newBgLineColor my-[4px]" />
                   )}
                 </div>
                 <div className="pb-[18px]">
                   <div className="text-[14.5px] font-[600]">{s.title}</div>
                   {s.detail && (
-                    <div className="text-[13px] text-white/50 mt-[2px] leading-[1.5]">
+                    <div className="text-[13px] text-newTextColor/50 mt-[2px] leading-[1.5]">
                       {s.detail}
                     </div>
                   )}
@@ -334,7 +334,7 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
               {ov.triggers.map((t, i) => (
                 <div
                   key={i}
-                  className="text-[13.5px] text-white/70 leading-[1.5] flex gap-[8px]"
+                  className="text-[13.5px] text-newTextColor/70 leading-[1.5] flex gap-[8px]"
                 >
                   <span className="text-[#8b5cf6] mt-[1px]">◆</span>
                   {t}
@@ -345,13 +345,13 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
         )}
         {!!ov?.integrations?.length && (
           <Section eyebrow="Stack" title="Works with">
-            <div className="flex flex-col divide-y divide-white/5">
+            <div className="flex flex-col divide-y divide-newBgLineColor">
               {ov.integrations.map((it, i) => (
                 <div key={i} className="flex gap-[12px] py-[8px] text-[13.5px]">
-                  <span className="text-white/45 min-w-[120px]">
+                  <span className="text-newTextColor/45 min-w-[120px]">
                     {it.concern}
                   </span>
-                  <span className="text-white/80 flex-1">{it.choice}</span>
+                  <span className="text-newTextColor/80 flex-1">{it.choice}</span>
                 </div>
               ))}
             </div>
@@ -364,7 +364,7 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
         <Section eyebrow="Results" title="What it delivers">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
             {ov.outputs.map((o, i) => (
-              <div key={i} className="flex gap-[10px] text-[13.5px] text-white/70">
+              <div key={i} className="flex gap-[10px] text-[13.5px] text-newTextColor/70">
                 <span className="text-[#8b5cf6] mt-[2px]">✓</span>
                 <span className="leading-[1.5]">{o}</span>
               </div>
@@ -376,12 +376,12 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
       {/* ── built for Ghana ── */}
       {!!ov?.ghana?.length && (
         <div className="rounded-[14px] border border-[#8b5cf6]/25 bg-[#8b5cf6]/[0.06] p-[22px] flex flex-col gap-[12px]">
-          <div className="text-[11px] font-[700] tracking-[0.14em] uppercase text-[#a78bfa]">
+          <div className="text-[11px] font-[700] tracking-[0.14em] uppercase text-[#8b5cf6]">
             Built for Ghana
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
             {ov.ghana.map((g, i) => (
-              <div key={i} className="flex gap-[10px] text-[13px] text-white/70">
+              <div key={i} className="flex gap-[10px] text-[13px] text-newTextColor/70">
                 <span className="text-[#8b5cf6] mt-[2px]">•</span>
                 <span className="leading-[1.5]">{g}</span>
               </div>
@@ -396,16 +396,16 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
         showConfig &&
         Object.keys(detail.variables || {}).length > 0 && (
           <Section eyebrow="Setup" title="Configure">
-            <p className="text-[13px] text-white/50 -mt-[6px]">
+            <p className="text-[13px] text-newTextColor/50 -mt-[6px]">
               These non-secret settings shape how your copy behaves. Secret
               credentials (tokens, API keys) are attached securely during setup.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[12px]">
               {Object.entries(detail.variables).map(([k, v]) => (
                 <label key={k} className="flex flex-col gap-[5px]">
-                  <span className="text-[12px] text-white/55 font-mono">{k}</span>
+                  <span className="text-[12px] text-newTextColor/55 font-mono">{k}</span>
                   <input
-                    className="bg-[#111] border border-white/10 rounded-[8px] px-[11px] py-[8px] text-[13px] focus:border-[#8b5cf6]/60 outline-none"
+                    className="bg-newBgColor border border-newBgLineColor rounded-[8px] px-[11px] py-[8px] text-[13px] focus:border-[#8b5cf6]/60 outline-none"
                     value={config[k] ?? String(v ?? '')}
                     onChange={(e) =>
                       setConfig((c) => ({ ...c, [k]: e.target.value }))
@@ -431,13 +431,13 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
             {detail.requiredCredentials.map((c: any, i: number) => (
               <div
                 key={i}
-                className="rounded-[10px] border border-white/8 bg-[#1A1919] px-[14px] py-[11px]"
+                className="rounded-[10px] border border-newBgLineColor bg-newBgColorInner px-[14px] py-[11px]"
               >
                 <div className="text-[13.5px] font-[600]">
                   {c.name || c.n8nType || 'Credential'}
                 </div>
                 {c.n8nType && c.name && (
-                  <div className="text-[12px] text-white/40 mt-[1px]">
+                  <div className="text-[12px] text-newTextColor/40 mt-[1px]">
                     {c.n8nType}
                   </div>
                 )}
@@ -450,9 +450,9 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
       {/* ── executions & results (deployed) ── */}
       {instance && (
         <Section eyebrow="Activity" title="Executions & results">
-          <div className="rounded-[12px] border border-white/10 bg-[#1A1919] p-[18px] flex flex-col gap-[14px]">
+          <div className="rounded-[12px] border border-newBgLineColor bg-newBgColorInner p-[18px] flex flex-col gap-[14px]">
             <div className="flex items-center">
-              <div className="flex-1 text-[13px] text-white/50">
+              <div className="flex-1 text-[13px] text-newTextColor/50">
                 {instance.statusDetail || 'Trigger a run or wait for the schedule.'}
               </div>
               <button
@@ -465,17 +465,17 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
             </div>
             <div className="flex flex-col">
               {(output?.runs || []).length === 0 && (
-                <div className="text-[13px] text-white/40">No runs yet.</div>
+                <div className="text-[13px] text-newTextColor/40">No runs yet.</div>
               )}
               {(output?.runs || []).map((r: any) => (
                 <div
                   key={r.id}
-                  className="flex items-center gap-[12px] text-[13px] border-b border-white/5 py-[8px]"
+                  className="flex items-center gap-[12px] text-[13px] border-b border-newBgLineColor py-[8px]"
                 >
-                  <span className="font-mono text-white/40 text-[11px] min-w-[150px]">
+                  <span className="font-mono text-newTextColor/40 text-[11px] min-w-[150px]">
                     {new Date(r.startedAt || r.createdAt).toLocaleString()}
                   </span>
-                  <span className="text-white/70">{r.status}</span>
+                  <span className="text-newTextColor/70">{r.status}</span>
                 </div>
               ))}
             </div>
@@ -484,7 +484,7 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
                 {(output.outputs || []).map((o: any) => (
                   <pre
                     key={o.id}
-                    className="bg-[#111] rounded-[8px] p-[12px] text-[11px] text-white/70 overflow-x-auto"
+                    className="bg-newBgColor rounded-[8px] p-[12px] text-[11px] text-newTextColor/70 overflow-x-auto"
                   >
                     {JSON.stringify(o.kpis || o.items || o, null, 2)}
                   </pre>

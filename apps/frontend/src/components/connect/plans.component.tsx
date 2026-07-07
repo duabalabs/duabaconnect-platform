@@ -27,10 +27,10 @@ export const PlansComponent: FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-[24px] text-white">
+    <div className="flex flex-col gap-[24px] text-textColor">
       <div>
         <h1 className="text-[24px] font-[600]">Plans</h1>
-        <p className="text-white/60 text-[14px]">
+        <p className="text-newTextColor/60 text-[14px]">
           Unlock your full social workspace. Secure checkout via Paystack.
         </p>
       </div>
@@ -38,14 +38,14 @@ export const PlansComponent: FC = () => {
         {PLANS.map((p) => (
           <div
             key={p.tier}
-            className="rounded-[10px] border border-white/10 bg-[#1A1919] p-[20px] flex flex-col gap-[12px]"
+            className="rounded-[10px] border border-newBgLineColor bg-newBgColorInner p-[20px] flex flex-col gap-[12px]"
           >
             <div className="text-[16px] font-[600]">{p.name}</div>
             <div className="text-[28px] font-[700]">
               GHS {p.priceGhs}
-              <span className="text-[14px] font-[400] text-white/50">/mo</span>
+              <span className="text-[14px] font-[400] text-newTextColor/50">/mo</span>
             </div>
-            <div className="text-[13px] text-white/60 flex-1">{p.blurb}</div>
+            <div className="text-[13px] text-newTextColor/60 flex-1">{p.blurb}</div>
             <button
               className="rounded-[8px] bg-[#8b5cf6] px-[16px] py-[9px] text-[14px] font-[600]"
               onClick={() => subscribe(p.tier)}

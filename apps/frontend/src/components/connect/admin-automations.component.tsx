@@ -47,18 +47,18 @@ export const AdminAutomationsComponent: FC = () => {
 
   if (!isAdmin) {
     return (
-      <div className="text-white/60 text-[14px] p-[24px]">
+      <div className="text-newTextColor/60 text-[14px] p-[24px]">
         This area is available to platform administrators only.
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-[24px] text-white">
+    <div className="flex flex-col gap-[24px] text-textColor">
       <div className="flex items-start">
         <div className="flex-1">
           <h1 className="text-[24px] font-[600]">Manage automations</h1>
-          <p className="text-white/60 text-[14px]">
+          <p className="text-newTextColor/60 text-[14px]">
             Add new workflows, adjust pricing, and activate or retire what
             appears in the Marketplace.
           </p>
@@ -71,14 +71,14 @@ export const AdminAutomationsComponent: FC = () => {
           Couldn&apos;t load the catalog — {String(error.message || error)}.
         </div>
       )}
-      {isLoading && <div className="text-white/50 text-[14px]">Loading…</div>}
+      {isLoading && <div className="text-newTextColor/50 text-[14px]">Loading…</div>}
 
-      <div className="rounded-[8px] border border-white/10 divide-y divide-white/10">
+      <div className="rounded-[8px] border border-newBgLineColor divide-y divide-newBgLineColor">
         {(data || []).map((item) => (
           <Row key={item.id} item={item} onChange={() => mutate()} />
         ))}
         {data && data.length === 0 && (
-          <div className="p-[16px] text-white/50 text-[14px]">
+          <div className="p-[16px] text-newTextColor/50 text-[14px]">
             No workflows yet. Use “Add workflow” to create the first one.
           </div>
         )}
@@ -137,7 +137,7 @@ const Row: FC<{ item: AdminItem; onChange: () => void }> = ({
     <div className="flex flex-wrap items-center gap-[12px] p-[14px]">
       <div className="min-w-[220px] flex-1">
         <div className="text-[14px] font-[500]">{item.name}</div>
-        <div className="text-[12px] text-white/40 font-mono">
+        <div className="text-[12px] text-newTextColor/40 font-mono">
           {item.workflowKey}
           {item.category ? ` · ${item.category}` : ''}
           {item.template ? ` · ${item.template.nodeCount} nodes` : ''}
@@ -145,7 +145,7 @@ const Row: FC<{ item: AdminItem; onChange: () => void }> = ({
       </div>
 
       <select
-        className="bg-[#1A1919] border border-white/10 rounded-[6px] px-[8px] py-[6px] text-[13px]"
+        className="bg-newBgColorInner border border-newBgLineColor rounded-[6px] px-[8px] py-[6px] text-[13px]"
         value={model}
         onChange={(e) => setModel(e.target.value)}
       >
@@ -157,9 +157,9 @@ const Row: FC<{ item: AdminItem; onChange: () => void }> = ({
       </select>
 
       <div className="flex items-center gap-[6px]">
-        <span className="text-[12px] text-white/40">GHS</span>
+        <span className="text-[12px] text-newTextColor/40">GHS</span>
         <input
-          className="w-[80px] bg-[#1A1919] border border-white/10 rounded-[6px] px-[8px] py-[6px] text-[13px] disabled:opacity-40"
+          className="w-[80px] bg-newBgColorInner border border-newBgLineColor rounded-[6px] px-[8px] py-[6px] text-[13px] disabled:opacity-40"
           type="number"
           min="0"
           value={price}
@@ -168,7 +168,7 @@ const Row: FC<{ item: AdminItem; onChange: () => void }> = ({
         />
       </div>
 
-      <label className="flex items-center gap-[6px] text-[13px] text-white/70 cursor-pointer">
+      <label className="flex items-center gap-[6px] text-[13px] text-newTextColor/70 cursor-pointer">
         <input
           type="checkbox"
           checked={active}
@@ -290,16 +290,16 @@ const AddWorkflow: FC<{ onSaved: () => void }> = ({ onSaved }) => {
   }
 
   return (
-    <div className="w-full mt-[12px] rounded-[10px] border border-white/10 bg-[#1A1919] p-[16px] flex flex-col gap-[10px]">
+    <div className="w-full mt-[12px] rounded-[10px] border border-newBgLineColor bg-newBgColorInner p-[16px] flex flex-col gap-[10px]">
       <div className="flex gap-[10px]">
         <input
-          className="flex-1 bg-[#111] border border-white/10 rounded-[6px] px-[10px] py-[8px] text-[13px]"
+          className="flex-1 bg-newBgColor border border-newBgLineColor rounded-[6px] px-[10px] py-[8px] text-[13px]"
           placeholder="workflow-key (unique slug)"
           value={form.workflowKey}
           onChange={(e) => set('workflowKey', e.target.value)}
         />
         <input
-          className="flex-1 bg-[#111] border border-white/10 rounded-[6px] px-[10px] py-[8px] text-[13px]"
+          className="flex-1 bg-newBgColor border border-newBgLineColor rounded-[6px] px-[10px] py-[8px] text-[13px]"
           placeholder="Display name"
           value={form.name}
           onChange={(e) => set('name', e.target.value)}
@@ -307,13 +307,13 @@ const AddWorkflow: FC<{ onSaved: () => void }> = ({ onSaved }) => {
       </div>
       <div className="flex gap-[10px]">
         <input
-          className="flex-1 bg-[#111] border border-white/10 rounded-[6px] px-[10px] py-[8px] text-[13px]"
+          className="flex-1 bg-newBgColor border border-newBgLineColor rounded-[6px] px-[10px] py-[8px] text-[13px]"
           placeholder="Category (e.g. sellub)"
           value={form.category}
           onChange={(e) => set('category', e.target.value)}
         />
         <select
-          className="bg-[#111] border border-white/10 rounded-[6px] px-[10px] py-[8px] text-[13px]"
+          className="bg-newBgColor border border-newBgLineColor rounded-[6px] px-[10px] py-[8px] text-[13px]"
           value={form.pricingModel}
           onChange={(e) => set('pricingModel', e.target.value)}
         >
@@ -324,9 +324,9 @@ const AddWorkflow: FC<{ onSaved: () => void }> = ({ onSaved }) => {
           ))}
         </select>
         <div className="flex items-center gap-[6px]">
-          <span className="text-[12px] text-white/40">GHS</span>
+          <span className="text-[12px] text-newTextColor/40">GHS</span>
           <input
-            className="w-[90px] bg-[#111] border border-white/10 rounded-[6px] px-[10px] py-[8px] text-[13px] disabled:opacity-40"
+            className="w-[90px] bg-newBgColor border border-newBgLineColor rounded-[6px] px-[10px] py-[8px] text-[13px] disabled:opacity-40"
             type="number"
             min="0"
             value={form.priceGhs}
@@ -336,18 +336,18 @@ const AddWorkflow: FC<{ onSaved: () => void }> = ({ onSaved }) => {
         </div>
       </div>
       <input
-        className="bg-[#111] border border-white/10 rounded-[6px] px-[10px] py-[8px] text-[13px]"
+        className="bg-newBgColor border border-newBgLineColor rounded-[6px] px-[10px] py-[8px] text-[13px]"
         placeholder="Short description"
         value={form.description}
         onChange={(e) => set('description', e.target.value)}
       />
       <textarea
-        className="bg-[#111] border border-white/10 rounded-[6px] px-[10px] py-[8px] text-[12px] font-mono h-[140px]"
+        className="bg-newBgColor border border-newBgLineColor rounded-[6px] px-[10px] py-[8px] text-[12px] font-mono h-[140px]"
         placeholder="Paste the n8n workflow export JSON here (nodes + connections)…"
         value={form.exportJson}
         onChange={(e) => set('exportJson', e.target.value)}
       />
-      <div className="text-[12px] text-white/40">
+      <div className="text-[12px] text-newTextColor/40">
         {previewNodes === null
           ? 'Optional — you can add the n8n graph now or later.'
           : previewNodes === -1
@@ -357,7 +357,7 @@ const AddWorkflow: FC<{ onSaved: () => void }> = ({ onSaved }) => {
       {err && <div className="text-red-400 text-[13px]">{err}</div>}
       <div className="flex gap-[10px] justify-end">
         <button
-          className="text-[13px] text-white/60 hover:underline"
+          className="text-[13px] text-newTextColor/60 hover:underline"
           onClick={() => setOpen(false)}
         >
           Cancel
