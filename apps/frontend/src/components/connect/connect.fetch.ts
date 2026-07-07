@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
 
 // Fetch wrapper for the DuabaConnect automation backend
-// (api.automate.duabaconnect.com). Sends the shared `.duabaconnect.com` session
+// (automateapi.duabaconnect.com). Sends the shared `.duabaconnect.com` session
 // cookie; the backend's SessionGuard verifies it.
 export const useConnectFetch = () => {
   const { connectUrl } = useVariables();

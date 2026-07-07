@@ -60,7 +60,7 @@ export const DevelopersComponent: FC = () => {
         <h1 className="text-[24px] font-[600]">Developers</h1>
         <p className="text-white/60 text-[14px]">
           API keys for the DuabaConnect integrator API
-          (<span className="font-mono">api.automate.duabaconnect.com</span>).
+          (<span className="font-mono">automateapi.duabaconnect.com</span>).
         </p>
       </div>
 
