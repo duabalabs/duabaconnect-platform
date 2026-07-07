@@ -11,5 +11,9 @@ export default async function Page(props: {
   params: Promise<{ workflowKey: string }>;
 }) {
   const { workflowKey } = await props.params;
-  return <AutomationDetailComponent workflowKey={workflowKey} />;
+  return (
+    <div className="flex-1 p-[20px] md:p-[28px] max-w-[1100px] mx-auto w-full">
+      <AutomationDetailComponent workflowKey={workflowKey} />
+    </div>
+  );
 }

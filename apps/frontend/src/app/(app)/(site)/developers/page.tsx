@@ -8,5 +8,9 @@ export const metadata = {
 };
 
 export default async function Page() {
-  return <DevelopersComponent />;
+  return (
+    <div className="flex-1 p-[20px] md:p-[28px] max-w-[1100px] mx-auto w-full">
+      <DevelopersComponent />
+    </div>
+  );
 }
