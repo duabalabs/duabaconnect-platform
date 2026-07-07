@@ -27,8 +27,11 @@ export class TemporalRegister implements OnModuleInit {
       await connection.operatorService.addSearchAttributes({
         namespace: process.env.TEMPORAL_NAMESPACE || 'default',
         searchAttributes: missingAttributes.reduce((all, current) => {
+          // 2 = IndexedValueType KEYWORD (was 1 = TEXT). Postgres visibility caps
+          // custom Text attrs at 3 (CustomTextField/CustomStringField use 2), so
+          // registering these as Text overflowed. They're IDs → Keyword is right.
           // @ts-ignore
-          all[current] = 1;
+          all[current] = 2;
           return all;
         }, {}),
       });
