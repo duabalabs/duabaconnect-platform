@@ -104,6 +104,14 @@ export class SubscriptionService {
       await this._integrationService.changeActiveCron(organizationId);
     }
 
+    // Persist the tier itself — without this the paywall (which reads
+    // subscription.subscriptionTier) never clears after a Sellub payment.
+    await this._subscriptionRepository.setTierByOrg(
+      organizationId,
+      billing,
+      totalChannels
+    );
+
     return true;
   }
 

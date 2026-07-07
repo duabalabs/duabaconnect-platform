@@ -56,6 +56,33 @@ export class SubscriptionRepository {
     });
   }
 
+  // Persist the tier for the org-based (external portal / Sellub) path, which
+  // otherwise only reconciled channel counts and never wrote subscriptionTier.
+  // FREE has no enum value — it's represented as "no active subscription", so we
+  // remove the row and let `/user/self` fall back to FREE.
+  setTierByOrg(
+    organizationId: string,
+    billing: 'FREE' | 'STANDARD' | 'TEAM' | 'PRO' | 'ULTIMATE',
+    totalChannels: number
+  ) {
+    if (billing === 'FREE') {
+      return this._subscription.model.subscription.deleteMany({
+        where: { organizationId },
+      });
+    }
+    return this._subscription.model.subscription.upsert({
+      where: { organizationId },
+      update: { subscriptionTier: billing, totalChannels, deletedAt: null },
+      create: {
+        organizationId,
+        subscriptionTier: billing,
+        totalChannels,
+        period: 'MONTHLY',
+        deletedAt: null,
+      },
+    });
+  }
+
   updateConnectedStatus(account: string, accountCharges: boolean) {
     return this._user.model.user.updateMany({
       where: {
