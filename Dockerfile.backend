@@ -32,13 +32,14 @@ ENV HOME=/tmp
 # any UID (pnpm nests them under .pnpm, so search the whole tree).
 RUN find /app/node_modules -type d \( -name 'prisma' -o -name '@prisma' -o -name '.prisma' \) -exec chmod -R a+rwX {} + 2>/dev/null || true
 
-# Sync the platform schema, then run backend + orchestrator under pm2 (pm2 logs
-# keeps the container in the foreground). The frontend pm2 process is not started.
-# Use the prisma already installed at build (`pnpm exec`), NOT `pnpm dlx`, which
-# would re-download prisma on every boot. `--skip-generate`: the client is
-# already generated at build, so skip the boot-time regenerate (which would
-# copy the engine into a root-owned node_modules dir → EACCES).
-# Start the two apps SEQUENTIALLY (not --parallel): running both `pm2 start`
-# concurrently races to spawn the daemon at the same PM2_HOME, and one app's
-# registration is lost. The first call spawns the daemon; the second reuses it.
-CMD ["sh", "-c", "pnpm exec prisma db push --skip-generate --accept-data-loss --schema ./libraries/nestjs-libraries/src/database/prisma/schema.prisma && pnpm --filter ./apps/backend run pm2 && pnpm --filter ./apps/orchestrator run pm2 && pm2 logs"]
+# Sync the platform schema, then run backend + orchestrator DIRECTLY (no pm2).
+# Inside Kubernetes, K8s IS the process supervisor — pm2 only added failure
+# modes here (daemon-spawn races, swallowed crash logs, and a startup stall on
+# heavy boot logging). Run both node processes in the foreground with logs going
+# straight to the container's stdout; `wait -n` exits the container as soon as
+# EITHER process dies so K8s restarts the pod (and the crash is visible).
+#
+# `pnpm exec prisma` uses the prisma installed at build (not `pnpm dlx`, which
+# re-downloads on every boot). `--skip-generate`: the client is already
+# generated at build. Env comes from the container (K8s), so no dotenv wrapper.
+CMD ["bash", "-c", "pnpm exec prisma db push --skip-generate --accept-data-loss --schema ./libraries/nestjs-libraries/src/database/prisma/schema.prisma && { node --experimental-require-module apps/backend/dist/apps/backend/src/main.js & node --experimental-require-module apps/orchestrator/dist/apps/orchestrator/src/main.js & wait -n; }"]
