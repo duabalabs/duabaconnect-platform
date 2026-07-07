@@ -21,7 +21,8 @@ interface AdminItem {
   } | null;
 }
 
-const PRICING_MODELS = ['free', 'subscription', 'oneoff'];
+// Automations are billed as a monthly running price only — no outright purchases.
+const PRICING_MODELS = ['free', 'subscription'];
 
 // Super-admin space to manage the automation catalog: add new workflows, retune
 // pricing, activate/retire, and remove. Talks to the automation backend's
