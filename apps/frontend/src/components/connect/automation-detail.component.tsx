@@ -116,7 +116,6 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
   );
 
   const [config, setConfig] = useState<Record<string, string>>({});
-  const [showConfig, setShowConfig] = useState(false);
   useEffect(() => {
     if (detail?.variables) setConfig({ ...detail.variables });
   }, [detail?.workflowKey]);
@@ -196,20 +195,10 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
       ) : canDeploy ? (
         <button
           className="rounded-[10px] bg-[#8b5cf6] hover:bg-[#7c3aed] px-[16px] py-[11px] text-[14px] font-[700] disabled:opacity-50 transition-colors"
-          onClick={() =>
-            Object.keys(detail.variables || {}).length && !showConfig
-              ? setShowConfig(true)
-              : deploy()
-          }
+          onClick={deploy}
           disabled={busy}
         >
-          {busy
-            ? 'Deploying…'
-            : isAdmin && paid
-            ? 'Deploy free (admin)'
-            : Object.keys(detail.variables || {}).length && !showConfig
-            ? 'Configure & deploy'
-            : 'Deploy'}
+          {busy ? 'Deploying…' : isAdmin && paid ? 'Deploy free (admin)' : 'Deploy'}
         </button>
       ) : (
         <button
@@ -390,15 +379,16 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
         </div>
       )}
 
-      {/* ── configure (before deploy) ── */}
+      {/* ── configure (always shown before deploy so params are obvious) ── */}
       {!instance &&
         canDeploy &&
-        showConfig &&
         Object.keys(detail.variables || {}).length > 0 && (
-          <Section eyebrow="Setup" title="Configure">
+          <Section eyebrow="Setup" title="Configure the parameters">
             <p className="text-[13px] text-newTextColor/50 -mt-[6px]">
-              These non-secret settings shape how your copy behaves. Secret
-              credentials (tokens, API keys) are attached securely during setup.
+              Set these before you deploy — they&apos;re applied to your copy of
+              the workflow. Pre-filled with sensible defaults; edit any you need.
+              Secret credentials (tokens, API keys) are attached securely during
+              setup, not here.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[12px]">
               {Object.entries(detail.variables).map(([k, v]) => (
