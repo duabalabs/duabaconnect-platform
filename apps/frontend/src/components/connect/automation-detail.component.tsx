@@ -152,6 +152,22 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
     }
   }, [connectFetch, instance, mutateOutput]);
 
+  const removeInstance = useCallback(async () => {
+    if (!instance) return;
+    if (!confirm('Remove this deployment? It will be deleted from n8n and you can deploy again.'))
+      return;
+    setBusy(true);
+    try {
+      await connectFetch(
+        `/v1/automations/instances/${instance.id}?clientRef=self`,
+        { method: 'DELETE' }
+      );
+      await mutateInstances();
+    } finally {
+      setBusy(false);
+    }
+  }, [connectFetch, instance, mutateInstances]);
+
   const subscribe = useCallback(() => {
     const url = new URL(
       externalBillingPortalUrl || '/plans',
@@ -441,10 +457,17 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
       {instance && (
         <Section eyebrow="Activity" title="Executions & results">
           <div className="rounded-[12px] border border-newBgLineColor bg-newBgColorInner p-[18px] flex flex-col gap-[14px]">
-            <div className="flex items-center">
+            <div className="flex items-center gap-[10px]">
               <div className="flex-1 text-[13px] text-newTextColor/50">
                 {instance.statusDetail || 'Trigger a run or wait for the schedule.'}
               </div>
+              <button
+                className="text-[13px] text-red-400 hover:underline disabled:opacity-50"
+                onClick={removeInstance}
+                disabled={busy}
+              >
+                Remove
+              </button>
               <button
                 className="rounded-[8px] bg-[#8b5cf6] hover:bg-[#7c3aed] px-[14px] py-[7px] text-[13px] font-[600] disabled:opacity-50 transition-colors"
                 onClick={run}
