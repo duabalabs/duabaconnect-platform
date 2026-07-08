@@ -152,6 +152,28 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
     }
   }, [connectFetch, instance, mutateOutput]);
 
+  const [publishErr, setPublishErr] = useState<string | null>(null);
+  const publish = useCallback(
+    async (on: boolean) => {
+      if (!instance) return;
+      setBusy(true);
+      setPublishErr(null);
+      try {
+        const r = await connectFetch(
+          `/v1/automations/instances/${instance.id}/${on ? 'publish' : 'unpublish'}`,
+          { method: 'POST', body: JSON.stringify({ clientRef: 'self' }) }
+        );
+        const j = await r.json();
+        if (on && j.published === false) setPublishErr(j.error || 'Could not publish');
+        await mutateOutput();
+        await mutateInstances();
+      } finally {
+        setBusy(false);
+      }
+    },
+    [connectFetch, instance, mutateOutput, mutateInstances]
+  );
+
   const removeInstance = useCallback(async () => {
     if (!instance) return;
     if (!confirm('Remove this deployment? It will be deleted from n8n and you can deploy again.'))
@@ -205,8 +227,14 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
         <span className="text-[14px] text-newTextColor/50">{priceUnit(detail)}</span>
       </div>
       {instance ? (
-        <div className="rounded-[8px] bg-[#8b5cf6]/15 text-[#8b5cf6] text-[13px] px-[12px] py-[10px] text-center font-[600]">
-          Deployed · {instance.status}
+        <div
+          className={`rounded-[8px] text-[13px] px-[12px] py-[10px] text-center font-[600] ${
+            output?.published
+              ? 'bg-emerald-500/15 text-emerald-400'
+              : 'bg-amber-500/15 text-amber-400'
+          }`}
+        >
+          {output?.published ? 'Published — live in n8n' : 'Draft — not published'}
         </div>
       ) : canDeploy ? (
         <button
@@ -455,12 +483,35 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
 
       {/* ── executions & results (deployed) ── */}
       {instance && (
-        <Section eyebrow="Activity" title="Executions & results">
-          <div className="rounded-[12px] border border-newBgLineColor bg-newBgColorInner p-[18px] flex flex-col gap-[14px]">
-            <div className="flex items-center gap-[10px]">
-              <div className="flex-1 text-[13px] text-newTextColor/50">
-                {instance.statusDetail || 'Trigger a run or wait for the schedule.'}
-              </div>
+        <Section eyebrow="Deployment" title="Status & runs">
+          <div className="rounded-[12px] border border-newBgLineColor bg-newBgColorInner p-[18px] flex flex-col gap-[16px]">
+            {/* state + how it runs + controls */}
+            <div className="flex flex-wrap items-center gap-[10px]">
+              <span
+                className={`text-[12px] font-[700] px-[10px] py-[4px] rounded-full ${
+                  output?.published
+                    ? 'bg-emerald-500/15 text-emerald-400'
+                    : output?.existsInN8n === false
+                    ? 'bg-red-500/15 text-red-400'
+                    : 'bg-amber-500/15 text-amber-400'
+                }`}
+              >
+                {output?.published
+                  ? 'Published'
+                  : output?.existsInN8n === false
+                  ? 'Not in n8n'
+                  : 'Draft'}
+              </span>
+              <span className="text-[12px] text-newTextColor/50">
+                {output?.triggerType === 'schedule'
+                  ? 'Continuous — runs on a schedule once published'
+                  : output?.triggerType === 'webhook'
+                  ? 'On-demand — triggered on request'
+                  : output?.triggerType === 'manual'
+                  ? 'Manual — run on demand'
+                  : 'Automated'}
+              </span>
+              <div className="flex-1" />
               <button
                 className="text-[13px] text-red-400 hover:underline disabled:opacity-50"
                 onClick={removeInstance}
@@ -468,14 +519,62 @@ export const AutomationDetailComponent: FC<{ workflowKey: string }> = ({
               >
                 Remove
               </button>
-              <button
-                className="rounded-[8px] bg-[#8b5cf6] hover:bg-[#7c3aed] px-[14px] py-[7px] text-[13px] font-[600] disabled:opacity-50 transition-colors"
-                onClick={run}
-                disabled={busy}
-              >
-                {busy ? '…' : 'Run now'}
-              </button>
+              {output?.canRunOnDemand && (
+                <button
+                  className="rounded-[8px] border border-newBgLineColor px-[14px] py-[7px] text-[13px] font-[600] disabled:opacity-50"
+                  onClick={run}
+                  disabled={busy}
+                >
+                  {busy ? '…' : 'Run now'}
+                </button>
+              )}
+              {output?.published ? (
+                <button
+                  className="rounded-[8px] border border-newBgLineColor px-[14px] py-[7px] text-[13px] font-[600] disabled:opacity-50"
+                  onClick={() => publish(false)}
+                  disabled={busy}
+                >
+                  {busy ? '…' : 'Unpublish'}
+                </button>
+              ) : (
+                <button
+                  className="rounded-[8px] bg-[#8b5cf6] hover:bg-[#7c3aed] px-[14px] py-[7px] text-[13px] font-[700] disabled:opacity-50 transition-colors"
+                  onClick={() => publish(true)}
+                  disabled={busy}
+                >
+                  {busy ? 'Publishing…' : 'Publish'}
+                </button>
+              )}
             </div>
+
+            {/* what's needed to go live */}
+            {!output?.published && (
+              <div className="rounded-[8px] bg-amber-500/[0.06] border border-amber-500/20 p-[12px] flex flex-col gap-[8px]">
+                {publishErr || output?.lastError ? (
+                  <div className="text-[12.5px] text-amber-400">
+                    n8n couldn&apos;t activate it: {publishErr || output?.lastError}
+                  </div>
+                ) : (
+                  <div className="text-[12.5px] text-newTextColor/60">
+                    To go live, open it in n8n, attach the credentials below, then
+                    hit Publish.
+                  </div>
+                )}
+                {!!output?.credentials?.length && (
+                  <div className="flex flex-wrap gap-[6px]">
+                    {output.credentials.map((c: string, i: number) => (
+                      <span
+                        key={i}
+                        className="text-[11px] font-mono rounded-full border border-newBgLineColor px-[8px] py-[3px] text-newTextColor/70"
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="flex flex-col">
               {(output?.runs || []).length === 0 && (
                 <div className="text-[13px] text-newTextColor/40">No runs yet.</div>
